@@ -1,0 +1,17 @@
+#include <toneAC.h>
+
+void setup() {
+  Serial.begin(9600);
+}
+
+void loop() {
+  if (Serial.available()) {
+    char receivedChar = Serial.read();
+    
+    if (receivedChar == '5') {     // 키보드에서 '5'를 입력받으면
+      toneAC(440, 1000);           // 주파수 440Hz로 '도' 소리 출력
+      delay(1000);                 // 1초 동안 소리 유지
+      noToneAC();                  // 소리 중지
+    }
+  }
+}
