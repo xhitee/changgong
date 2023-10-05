@@ -1,17 +1,17 @@
-#include <toneAC.h>
+import processing.serial.*;
+
+Serial arduino;
 
 void setup() {
-  Serial.begin(9600);
+   arduino = new Serial(this, "COM4", 9600);     //'COM4' 포트에 아두이노 시리얼 통신
 }
 
-void loop() {
-  if (Serial.available()) {
-    char receivedChar = Serial.read();
-    
-    if (receivedChar == '5') {     // 키보드에서 '5'를 입력받으면
-      toneAC(440, 1000);           // 주파수 440Hz로 '도' 소리 출력
-      delay(1000);                 // 1초 동안 소리 유지
-      noToneAC();                  // 소리 중지
-    }
-  }
+void draw() {
+   // 추가적인 그래픽 또는 로직은 필요에 따라 구현 가능합니다.
+}
+
+void keyPressed() {
+   if (key == '5') {                // 키보드에서 '5'를 누르면
+      arduino.write('5');           // 아두이노로 문자 '5' 전송
+   }
 }
