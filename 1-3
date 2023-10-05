@@ -1,0 +1,18 @@
+#define BUTTON_PIN 7
+
+void setup() {
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+  Serial.begin(9600);
+}
+
+void loop() {
+  int buttonState = digitalRead(BUTTON_PIN);
+
+  if (buttonState == LOW) {     // 버튼이 눌렸을 때 (GND와 연결되었을 때)
+    Serial.println("RED");      // 시리얼 통신으로 "RED" 전송
+  } else {                     // 버튼이 떨어져 있을 때 (GND와 연결이 해제되었을 때)
+    Serial.println("BLUE");     // 시리얼 통신으로 "BLUE" 전송
+  }
+
+  delay(100);                   // 딜레이를 추가하여 반복 속도 제어
+}
