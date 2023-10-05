@@ -1,0 +1,18 @@
+
+#define BUTTON_PIN 7
+#define LED_PIN 13
+
+void setup() {
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+  pinMode(LED_PIN, OUTPUT);
+}
+
+void loop() {
+  int buttonState = digitalRead(BUTTON_PIN);
+
+  if (buttonState == LOW) {     // 버튼이 눌렸을 때 (GND와 연결되었을 때)
+    digitalWrite(LED_PIN, HIGH);   // 내부 LED 켜기
+  } else {                     // 버튼이 떨어져 있을 때 (GND와 연결이 해제되었을 때)
+    digitalWrite(LED_PIN, LOW);    // 내부 LED 끄기
+  }
+}
