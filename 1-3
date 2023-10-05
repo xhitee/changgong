@@ -1,18 +1,30 @@
-#define BUTTON_PIN 7
+import processing.serial.*;
+
+Serial arduino;
+color redColor = color(255, 0, 0);    // 붉은색 RGB 값 설정
+color blueColor = color(0, 0, 255);   // 푸른색 RGB 값 설정
 
 void setup() {
-  pinMode(BUTTON_PIN, INPUT_PULLUP);
-  Serial.begin(9600);
+   size(200, 200);
+   arduino = new Serial(this, "COM4", 9600);     //'COM4' 포트에 아두이노 시리얼 통신
 }
 
-void loop() {
-  int buttonState = digitalRead(BUTTON_PIN);
+void draw() {
+   background(blueColor);          // 기본 배경색은 푸른색
 
-  if (buttonState == LOW) {     // 버튼이 눌렸을 때 (GND와 연결되었을 때)
-    Serial.println("RED");      // 시리얼 통신으로 "RED" 전송
-  } else {                     // 버튼이 떨어져 있을 때 (GND와 연결이 해제되었을 때)
-    Serial.println("BLUE");     // 시리얼 통신으로 "BLUE" 전송
-  }
+   while (arduino.available() > 0) {
+      String inData = arduino.readStringUntil('\n');     //'RED', 'BLUE'
+      inData = trim(inData);
 
-  delay(100);                   // 딜레이를 추가하여 반복 속도 제어
+      switch (inData) {
+         case "RED":
+            background(redColor);
+            break;
+         case "BLUE":
+            background(blueColor);
+            break;
+         default:
+            break;
+      }
+   }
 }
