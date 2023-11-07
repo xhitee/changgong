@@ -1,0 +1,129 @@
+----------------------------------------------------------------------LED 제어--------------------------------------------------------------------------------------
+
+//아두이노
+
+int ledPin = 13; // 13번 핀을 LED에 연결합니다.
+
+void setup() {
+  pinMode(ledPin, OUTPUT); // 13번 핀을 출력 모드로 설정합니다.
+  Serial.begin(9600); // 시리얼 통신을 시작합니다.
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+    char command = Serial.read(); // 시리얼로부터 명령어를 읽어옵니다.
+    
+    if (command == '1') {
+      digitalWrite(ledPin, HIGH); // LED를 켭니다.
+    } else if (command == '0') {
+      digitalWrite(ledPin, LOW); // LED를 끕니다.
+    }
+  }
+}
+
+
+//프로세싱
+
+import processing.serial.*;
+
+Serial arduinoPort;
+
+void setup() {
+  size(200, 200);
+  
+  String arduinoPortName = Serial.list()[0]; // 아두이노 포트 이름
+  arduinoPort = new Serial(this, arduinoPortName, 9600);
+}
+
+void draw() {
+  background(255);
+  
+  if (mousePressed) {
+    if (mouseButton == LEFT) {
+      arduinoPort.write('1'); // 아두이노로 '1'을 전송하여 LED를 켭니다.
+    } else if (mouseButton == RIGHT) {
+      arduinoPort.write('0'); // 아두이노로 '0'을 전송하여 LED를 끕니다.
+    }
+  }
+}
+
+
+---------------------------------------온조-------------------------------------------------------------------------------------------------
+
+//아두이노
+
+#include <Wire.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_TSL2561_U.h>
+#include <Adafruit_MCP9808.h>
+
+Adafruit_TSL2561_Unified tsl = Adafruit_TSL2561_Unified(TSL2561_ADDR_FLOAT, 12345);
+Adafruit_MCP9808 tempsensor = Adafruit_MCP9808();
+
+void setup() {
+  Serial.begin(9600);
+  
+  if (!tsl.begin()) {
+    Serial.println("TSL2561 초기화 실패!");
+    while (1);
+  }
+  
+  if (!tempsensor.begin()) {
+    Serial.println("MCP9808 초기화 실패!");
+    while (1);
+  }
+}
+
+void loop() {
+  sensors_event_t event;
+  tsl.getEvent(&event);
+  
+  float temperature = tempsensor.readTempC();
+  uint16_t lux = event.light;
+
+  Serial.print("온도: ");
+  Serial.print(temperature);
+  Serial.print("도, 조도: ");
+  Serial.print(lux);
+  Serial.println(" lux");
+  
+  delay(1000);
+}
+
+//프로세싱
+
+import processing.serial.*;
+
+Serial arduinoPort;
+PFont font;
+
+void setup() {
+  size(400, 200);
+  font = createFont("Arial", 24);
+  
+  String arduinoPortName = Serial.list()[0]; // 아두이노 포트 이름
+  arduinoPort = new Serial(this, arduinoPortName, 9600);
+}
+
+void draw() {
+  if (arduinoPort.available() > 0) {
+    String data = arduinoPort.readStringUntil('\n');
+    if (data != null) {
+      data = data.trim();
+      String[] values = data.split(",");
+      if (values.length == 2) {
+        float temperature = Float.parseFloat(values[0]);
+        int lux = Integer.parseInt(values[1]);
+        
+        background(255);
+        fill(0);
+        textFont(font);
+        textAlign(CENTER, CENTER);
+        text("온도: " + temperature + "도", width/2, height/2 - 20);
+        text("조도: " + lux + " lux", width/2, height/2 + 20);
+      }
+    }
+  }
+}
+
+----------------------------------------------------------------------------------------------------
