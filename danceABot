@@ -1,0 +1,58 @@
+// DC 모터를 제어하는 핀 번호 설정
+const int motorPin1 = 2;  // 왼쪽 모터 핀 번호
+const int motorPin2 = 3;  // 오른쪽 모터 핀 번호
+
+// 로봇 앞으로 이동하는 동작
+void move_forward() {
+  digitalWrite(motorPin1, HIGH);  // 왼쪽 모터 전진
+  digitalWrite(motorPin2, HIGH);  // 오른쪽 모터 전진
+  // 여기에 필요한 딜레이나 추가적인 동작을 작성할 수 있습니다.
+}
+
+// 로봇 뒤로 이동하는 동작
+void move_backward() {
+  digitalWrite(motorPin1, LOW);   // 왼쪽 모터 후진
+  digitalWrite(motorPin2, LOW);   // 오른쪽 모터 후진
+  // 여기에 필요한 딜레이나 추가적인 동작을 작성할 수 있습니다.
+}
+
+// 로봇 왼쪽으로 이동하는 동작
+void move_left() {
+  digitalWrite(motorPin1, HIGH);  // 왼쪽 모터 전진
+  digitalWrite(motorPin2, LOW);   // 오른쪽 모터 후진
+  // 여기에 필요한 딜레이나 추가적인 동작을 작성할 수 있습니다.
+}
+
+// 로봇 오른쪽으로 이동하는 동작
+void move_right() {
+  digitalWrite(motorPin1, LOW);   // 왼쪽 모터 후진
+  digitalWrite(motorPin2, HIGH);  // 오른쪽 모터 전진
+  // 여기에 필요한 딜레이나 추가적인 동작을 작성할 수 있습니다.
+}
+
+// 로봇 춤을 출 때의 동작
+void dance() {
+  // 여기에 로봇이 춤을 출 때의 동작을 작성합니다.
+}
+
+void setup() {
+  pinMode(motorPin1, OUTPUT);
+  pinMode(motorPin2, OUTPUT);
+}
+
+void loop() {
+  // 로봇 앞으로 이동
+  move_forward();
+
+  // 로봇 뒤로 이동
+  move_backward();
+
+  // 로봇 왼쪽으로 이동
+  move_left();
+
+  // 로봇 오른쪽으로 이동
+  move_right();
+
+  // 로봇 춤 출동작
+  dance();
+}
